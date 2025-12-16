@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulasi Slot Casino</title>
+</head>
+<body>
+    <main class="slot-machine">
+        <h1 class="title">SLOT CASINO</h1>
+        <p class="subtitle">Simulasi Game Slot</p>
+        
+        <div class="result-display" id="result"></div>
+
+        <div class="reels-container">
+            <div class="reels">
+                <div class="reel-container">
+                    <div class="reel-frame"></div>
+                    <div class="reel-lights"></div>
+                    <div class="reel" id="reel1">
+                        <span class="reel-symbol">🍒</span>
+                    </div>
+                </div>
+                <div class="reel-container">
+                    <div class="reel-frame"></div>
+                    <div class="reel-lights"></div>
+                    <div class="reel" id="reel2">
+                        <span class="reel-symbol">🍋</span>
+                    </div>
+                </div>
+                <div class="reel-container">
+                    <div class="reel-frame"></div>
+                    <div class="reel-lights"></div>
+                    <div class="reel" id="reel3">
+                        <span class="reel-symbol">🍊</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="spin-button-container">
+                <button class="casino-spin-btn" id="spinButton" onclick="spin()">
+                    <div class="btn-inner">
+                        <div class="btn-lights">
+                            <div class="light light-1"></div>
+                            <div class="light light-2"></div>
+                            <div class="light light-3"></div>
+                            <div class="light light-4"></div>
+                        </div>
+                        <div class="btn-content">
+                            <div class="spin-icon">🎰</div>
+                            <div class="spin-text">SPIN</div>
+                            <div class="cost-text">(<span id="spinCost">5.000</span> Rupiah)</div>
+                        </div>
+                        <div class="btn-glow"></div>
+                    </div>
+                </button>
+            </div>
+
+            <div class="auto-spin-section">
+                <div class="auto-spin-controls">
+                    <button class="auto-spin-btn" id="autoSpinButton" onclick="toggleAutoSpin()">
+                        <div class="auto-btn-inner">
+                            <div class="auto-btn-content">
+                                <div class="auto-icon">⚡</div>
+                                <div class="auto-text">AUTO SPIN</div>
+                                <div class="auto-status">Mulai Otomatis</div>
+                            </div>
+                        </div>
+                    </button>
+                    <button class="turbo-btn" id="turboButton" onclick="toggleTurboMode()" title="Mode Turbo">
+                        <div class="turbo-inner">
+                            <div class="turbo-icon">🚀</div>
+                            <div class="turbo-text">TURBO</div>
+                        </div>
+                    </button>
+                </div>
+                <div class="auto-spin-info" id="autoSpinInfo" style="display: none;">
+                    <div class="auto-counter">
+                        <span>Putaran: <span id="autoSpinCount">0</span></span>
+                        <span>Total Menang: Rp <span id="totalWinnings">0</span></span>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="credits">
+                Saldo: Rp <span id="credits">1000</span>
+            </div>
+
+            <div class="free-spin-display" id="freeSpinDisplay" style="display: none;">
+                <div class="free-spin-content">
+                    <div class="free-spin-icon">🎁</div>
+                    <div class="free-spin-text">FREE SPINS</div>
+                    <div class="free-spin-count">Sisa: <span id="freeSpinCount">0</span></div>
+                </div>
+            </div>
+
+            <div class="credit-controls">
+                <button class="credit-btn deposit-btn" onclick="showDepositModal()">
+                    DEPOSIT
+                </button>
+                <button class="credit-btn withdraw-btn" onclick="withdraw()">
+                    WITHDRAW
+                </button>
+            </div>
+
+            <div class="bet-section">
+                <div class="bet-label">
+                    <span class="neon-text">BET MULTIPLIER</span>
+                </div>
+                <div class="bet-buttons">
+                    <button class="bet-btn active" data-bet="1" onclick="setBet(1)">
+                        <span class="bet-multiplier">1x</span>
+                        <span class="bet-amount">5.000</span>
+                    </button>
+                    <button class="bet-btn" data-bet="2" onclick="setBet(2)">
+                        <span class="bet-multiplier">2x</span>
+                        <span class="bet-amount">10.000</span>
+                    </button>
+                    <button class="bet-btn" data-bet="5" onclick="setBet(5)">
+                        <span class="bet-multiplier">5x</span>
+                        <span class="bet-amount">25.000</span>
+                    </button>
+                    <button class="bet-btn" data-bet="10" onclick="setBet(10)">
+                        <span class="bet-multiplier">10x</span>
+                        <span class="bet-amount">50.000</span>
+                    </button>
+                    <button class="bet-btn" data-bet="50" onclick="setBet(50)">
+                        <span class="bet-multiplier">50x</span>
+                        <span class="bet-amount">250.000</span>
+                    </button>
+                    <button class="bet-btn" data-bet="200" onclick="setBet(200)">
+                        <span class="bet-multiplier">200x</span>
+                        <span class="bet-amount">1.000.000</span>
+                    </button>
+                </div>
+                <div class="current-bet-display">
+                    <div class="bet-info">
+                        <span class="bet-text">CURRENT BET:</span>
+                        <span class="bet-value" id="currentBetDisplay">1x (Rp 5.000)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- Admin and History Controls -->
+        <div class="control-buttons" style="position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 10px;">
+            <button class="secret-admin-btn" id="secretAdminBtn" onclick="toggleAdminMenu()" title="Admin Menu">
+                ⚙️
+            </button>
+            <button class="secret-admin-btn" id="historyBtn" onclick="showSpinHistory()" title="Riwayat Spin">
+                📊
+            </button>
+        </div>
+
+        <!-- Spin History Modal -->
+        <div class="modal-overlay" id="historyModal" onclick="closeHistoryModal()">
+            <div class="modal-content history-modal" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h3>📊 RIWAYAT HASIL SPIN</h3>
+                    <button class="close-btn" onclick="closeHistoryModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="history-summary" id="historySummary">
+                        <!-- Summary will be populated by JavaScript -->
+                    </div>
+                    <div class="history-content" id="historyContent">
+                        <!-- History table will be populated by JavaScript -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn cancel-btn" onclick="clearSpinHistory()">🗑️ Reset Riwayat</button>
+                    <button class="modal-btn confirm-btn" onclick="closeHistoryModal()">Tutup</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Menu Modal -->
+        <div class="modal-overlay" id="adminModal" onclick="closeAdminModal()">
+            <div class="modal-content admin-modal" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h3>🔧 ADMIN CONTROL PANEL</h3>
+                    <button class="close-btn" onclick="closeAdminModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <div class="admin-section">
+                        <h4>Persentase Kemunculan Simbol</h4>
+                        <div class="symbol-controls">
+                            <div class="symbol-control">
+                                <span class="symbol-display">🍒</span>
+                                <input type="range" id="cherry-range" min="0" max="100" value="25" onchange="updateSymbolWeight('🍒', this.value)">
+                                <span class="percentage-display" id="cherry-percent">25%</span>
+                            </div>
+                            <div class="symbol-control">
+                                <span class="symbol-display">🍋</span>
+                                <input type="range" id="lemon-range" min="0" max="100" value="20" onchange="updateSymbolWeight('🍋', this.value)">
+                                <span class="percentage-display" id="lemon-percent">20%</span>
+                            </div>
+                            <div class="symbol-control">
+                                <span class="symbol-display">🍊</span>
+                                <input type="range" id="orange-range" min="0" max="100" value="15" onchange="updateSymbolWeight('🍊', this.value)">
+                                <span class="percentage-display" id="orange-percent">15%</span>
+                            </div>
+                            <div class="symbol-control">
+                                <span class="symbol-display">🍇</span>
+                                <input type="range" id="grape-range" min="0" max="100" value="12" onchange="updateSymbolWeight('🍇', this.value)">
+                                <span class="percentage-display" id="grape-percent">12%</span>
+                            </div>
+                            <div class="symbol-control">
+                                <span class="symbol-display">🔔</span>
+                                <input type="range" id="bell-range" min="0" max="100" value="10" onchange="updateSymbolWeight('🔔', this.value)">
+                                <span class="percentage-display" id="bell-percent">10%</span>
+                            </div>
+                            <div class="symbol-control">
+                                <span class="symbol-display">💎</span>
+                                <input type="range" id="diamond-range" min="0" max="100" value="8" onchange="updateSymbolWeight('💎', this.value)">
+                                <span class="percentage-display" id="diamond-percent">8%</span>
+                            </div>
+                            <div class="symbol-control">
+                                <span class="symbol-display">⭐</span>
+                                <input type="range" id="star-range" min="0" max="100" value="5" onchange="updateSymbolWeight('⭐', this.value)">
+                                <span class="percentage-display" id="star-percent">5%</span>
+                            </div>
+                            <div class="symbol-control">
+                                <span class="symbol-display">👑</span>
+                                <input type="range" id="crown-range" min="0" max="100" value="2" onchange="updateSymbolWeight('👑', this.value)">
+                                <span class="percentage-display" id="crown-percent">2%</span>
+                            </div>
+                            <div class="symbol-control">
+                                <span class="symbol-display">🎁</span>
+                                <input type="range" id="gift-range" min="0" max="100" value="3" onchange="updateSymbolWeight('🎁', this.value)">
+                                <span class="percentage-display" id="gift-percent">3%</span>
+                            </div>
+                        </div>
+
+                        <div class="admin-presets">
+                            <h4>Preset Mode</h4>
+                            <div class="preset-buttons">
+                                <button class="preset-btn" onclick="setPreset('easy')">🟢 MUDAH</button>
+                                <button class="preset-btn" onclick="setPreset('normal')">🟡 NORMAL</button>
+                                <button class="preset-btn" onclick="setPreset('hard')">🔴 SULIT</button>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn cancel-btn" onclick="resetToDefault()">Reset Default</button>
+                    <button class="modal-btn confirm-btn" onclick="closeAdminModal()">Tutup</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="payouts">
+            <h3>Tabel Pembayaran</h3>
+            <div class="payout-line">
+                <span>🍒🍒🍒</span>
+                <span>+Rp 25.000</span>
+            </div>
+            <div class="payout-line">
+                <span>🍋🍋🍋</span>
+                <span>+Rp 37.500</span>
+            </div>
+            <div class="payout-line">
+                <span>🍊🍊🍊</span>
+                <span>+Rp 50.000</span>
+            </div>
+            <div class="payout-line">
+                <span>🍇🍇🍇</span>
+                <span>+Rp 75.000</span>
+            </div>
+            <div class="payout-line">
+                <span>🔔🔔🔔</span>
+                <span>+Rp 100.000</span>
+            </div>
+            <div class="payout-line">
+                <span>💎💎💎</span>
+                <span>+Rp 250.000</span>
+            </div>
+            <div class="payout-line">
+                <span>⭐⭐⭐</span>
+                <span>+Rp 500.000</span>
+            </div>
+            <div class="payout-line">
+                <span>👑👑👑</span>
+                <span>+Rp 1.000.000 (JACKPOT!)</span>
+            </div>
+            <div class="payout-line" style="border-top: 2px solid #ff69b4; margin-top: 10px; padding-top: 10px;">
+                <span>🎁 (1 Free Spin)</span>
+                <span>1 Putaran Gratis</span>
+            </div>
+            <div class="payout-line">
+                <span>🎁🎁 (3 Free Spin)</span>
+                <span>3 Putaran Gratis</span>
+            </div>
+            <div class="payout-line">
+                <span>🎁🎁🎁 (5 Free Spin)</span>
+                <span>5 Putaran Gratis</span>
+            </div>
+        </div>
+
+        <!-- Modal Deposit -->
+        <div class="modal-overlay" id="depositModal" onclick="closeDepositModal()">
+            <div class="modal-content" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h3>DEPOSIT SALDO</h3>
+                    <button class="close-btn" onclick="closeDepositModal()">×</button>
+                </div>
+                <div class="modal-body">
+                    <p>Masukkan nominal rupiah yang ingin ditambahkan ke saldo:</p>
+                    <div class="deposit-input-container">
+                        <span class="currency-prefix">Rp</span>
+                        <input type="text" id="depositAmount" placeholder="0" maxlength="13">
+                        <span class="input-label">Rupiah</span>
+                    </div>
+                    <p style="font-size: 0.8rem; color: #888; margin-top: -15px;">
+                        Hanya kelipatan ribuan (contoh: 5.000, 25.000)
+                    </p>
+                    <div class="quick-deposit">
+                        <p>Atau pilih jumlah cepat:</p>
+                        <div class="quick-buttons">
+                            <button class="quick-btn" onclick="setDepositAmount(10000)">Rp 10.000</button>
+                            <button class="quick-btn" onclick="setDepositAmount(50000)">Rp 50.000</button>
+                            <button class="quick-btn" onclick="setDepositAmount(100000)">Rp 100.000</button>
+                            <button class="quick-btn" onclick="setDepositAmount(500000)">Rp 500.000</button>
+                            <button class="quick-btn" onclick="setDepositAmount(1000000)">Rp 1.000.000</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn cancel-btn" onclick="closeDepositModal()">Batal</button>
+                    <button class="modal-btn confirm-btn" onclick="confirmDeposit()">Deposit</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+
+    <script src="script.js"></script>
+    <link rel="stylesheet" href="style.css">
+
+</body>
+</html>
